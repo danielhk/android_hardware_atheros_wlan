@@ -10,14 +10,19 @@
  *
  */
 
-#include <sys/cdefs.h>
-#include "hardware_legacy/driver_nl80211.h"
+#include "includes.h"
+#include <sys/types.h>
+#include <fcntl.h>
+#include <net/if.h>
+
+#include "common.h"
+#include "linux_ioctl.h"
+#include "driver_nl80211.h"
 #include "wpa_supplicant_i.h"
 #include "config.h"
 #ifdef ANDROID
 #include "android_drv.h"
 #endif
-
 
 typedef struct android_wifi_priv_cmd {
 	char *bufaddr;
@@ -101,6 +106,7 @@ int wpa_driver_nl80211_driver_cmd(void *priv, char *cmd, char *buf,
 		memset(&ifr, 0, sizeof(ifr));
 		memset(&priv_cmd, 0, sizeof(priv_cmd));
 		os_strlcpy(ifr.ifr_name, bss->ifname, IFNAMSIZ);
+
 		priv_cmd.bufaddr = buf;
 		priv_cmd.used_len = buf_len;
 		priv_cmd.total_len = buf_len;
